@@ -17,7 +17,7 @@ export default function Home() {
 
   function ProfileSideBar(props) {
     return (
-      <Box>        
+      <Box style={{padding: '12px'}}>        
         <AlurakutMenuProfileSidebar githubUser={githubUser}/>
       </Box>
     )
@@ -36,6 +36,28 @@ export default function Home() {
               Bem Vindo(a), {githubUser}
             </h1>
             <OrkutNostalgicIconSet />
+          </Box>
+          <Box>
+            <form onSubmit={e => {
+                  e.preventDefault()
+                }
+            }>             
+              <h2 className="subTitle">O que você deseja fazer? </h2>
+              <input 
+                type="text"
+                aria-label="O que você deseja fazer?"
+                placeholder="Nome"
+                name="comunityName"
+              />
+              <input 
+                type="url"
+                placeholder="URL?"
+                name="comunityImage"
+              />
+              <button type="submit">
+                Criar comunidade
+              </button>
+            </form>
           </Box>
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>

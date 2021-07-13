@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Box = styled.div`
   background: #FFFFFF;
   border-radius: 8px;
-  padding: 16px;
+  padding: 24px;
   /* CSS Pré-Pronto */
   margin-bottom: 10px;
   .boxLink {
@@ -40,19 +40,19 @@ const Box = styled.div`
     background-color: #F4F4F4;
     color: #333333;
     border: 0;
-    padding: 14px 16px;
-    margin-bottom: 14px;
-    border-radius: 10000px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    border-radius: 8px;
     ::placeholder {
       color: #333333;
-      opacity: 1;
+      opacity: 0.6;
     }
   }
   button {
     border: 0;
-    padding: 8px 12px;
+    padding: 12px 12px;
     color: #FFFFFF;
-    border-radius: 10000px;
+    border-radius: 8px;
     background-color: #6F92BB;
   }
 `; 
