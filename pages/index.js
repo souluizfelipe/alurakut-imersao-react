@@ -77,7 +77,7 @@ export default function Home() {
     <>
       <AlurakutMenu githubUser={githubUser} />
       <MainGrid>
-          <div classNme="profileArea" style={{ gridArea: 'profileArea' }}>
+          <div className="profileArea" style={{ gridArea: 'profileArea' }}>
             <ProfileSidebar githubUser={githubUser} />
         </div>
         <div className="welcomeArea" style={{ gridArea: 'welcomeArea' }}>
