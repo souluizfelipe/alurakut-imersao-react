@@ -7,18 +7,20 @@ const MainGrid = styled.main`
     margin-right: auto;
     max-width: 500px;
     padding: 16px;
+
     .profileArea {
         display: none;
         @media(min-width: 860px) {
             display: block;
         }
     }
-    @media(min-width: 860px) {
-        max-width: 1300px;
+    
+    @media(min-width: 1050px) {
+        max-width: 1150px;        
         display: grid;
         grid-template-areas: 
-            "profileArea contentArea profileRelationsArea";
-        grid-template-columns: 200px 1fr 400px;
+            "profileArea welcomeArea profileRelationsArea";
+        grid-template-columns: 200px 1fr 350px;
     }
 `;
 
