@@ -70,7 +70,7 @@ AlurakutMenu.Wrapper = styled.header`
     opacity: ${({ isMenuOpen }) => isMenuOpen ? '1' : '0'};
     transform: ${({ isMenuOpen }) => isMenuOpen ? 'translateY(0)' : 'translateY(calc(-100% - 48px))'};
     
-    @media(min-width: 860px) {
+    @media(min-width: 1010px) {
       display: none;
     }
 
@@ -109,7 +109,7 @@ AlurakutMenu.Wrapper = styled.header`
     position: relative;
     z-index: 101;
 
-    @media(min-width: 860px) {
+    @media(min-width: 1010px) {
       justify-content: flex-start;
     }
 
@@ -119,14 +119,14 @@ AlurakutMenu.Wrapper = styled.header`
       align-self: center;
       display: inline-block;
 
-      @media(min-width: 860px) {
+      @media(min-width: 1010px) {
         display: none;
       }
     }
 
     nav {
       display: none;
-      @media(min-width: 860px) {
+      @media(min-width: 1010px) {
         display: flex;
       }
 

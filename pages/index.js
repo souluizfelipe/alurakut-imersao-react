@@ -1,28 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MainGrid from '../src/components/MainGrid';
 import Box from '../src/components/Box';
-import { AlurakutMenu, OrkutNostalgicIconSet, AlurakutProfileSidebarMenuDefault } from '../src/lib/AlurakutCommons'
-import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
+import { AlurakutMenu, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons'
+import ProfileSidebar from '../src/components/ProfileSidebar';
 import ProfileRelationsBox from '../src/components/ProfileRelationsBox';
 
 
-function ProfileSidebar(props) {
-  return (
-    <Box as="aside" style={{padding: '12px'}}>
-      <img src={`https://github.com/${props.githubUser}.png`} style={{ borderRadius: '8px' }} />
-      <hr />
-
-      <p>
-        <a className="boxLink" href={`https://github.com/${props.githubUser}`}>
-          @{props.githubUser}
-        </a>
-      </p>
-      <hr />
-
-      <AlurakutProfileSidebarMenuDefault />
-    </Box>
-  )
-}
 
 export default function Home() {
 
@@ -70,8 +53,20 @@ export default function Home() {
       title: 'souluizfelipe',
       image: 'https://github.com/souluizfelipe.png'
     },  
-  ]
+  ]  
 
+  const [following, setFollowing] = useState([]);
+  // console.log(following)
+
+  useEffect(() => {
+    fetch('https://api.github.com/users/souluizfelipe/following')
+    .then(serverResponse => {
+      return serverResponse.json()
+    })
+    .then(convertedResponse => {
+      setFollowing(convertedResponse)
+    })
+  }, [])
  
   return (
     <>
@@ -126,6 +121,7 @@ export default function Home() {
         <div className="profileRelationsArea" 
           style={{ gridArea: 'profileRelationsArea' }}
         >         
+          <ProfileRelationsBox boxTitle="Seguindo" contentArray={following} />
           <ProfileRelationsBox boxTitle="Amigos" contentArray={friendsList} />
           <ProfileRelationsBox boxTitle="Comunidades" contentArray={comunidades} />
 
