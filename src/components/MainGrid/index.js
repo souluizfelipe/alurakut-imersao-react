@@ -20,7 +20,7 @@ const MainGrid = styled.main`
         display: grid;
         grid-template-areas: 
             "profileArea welcomeArea profileRelationsArea";
-        grid-template-columns: 200px 1fr 320px;
+        grid-template-columns: 200px 1fr 350px;
     }
 `;
 

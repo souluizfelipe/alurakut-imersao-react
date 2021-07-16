@@ -4,68 +4,46 @@ import Box from '../src/components/Box';
 import { AlurakutMenu, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons'
 import ProfileSidebar from '../src/components/ProfileSidebar';
 import ProfileRelationsBox from '../src/components/ProfileRelationsBox';
-
-
+import { ProfileRelationsBoxWrapper } from "../src/components/ProfileRelations";
 
 export default function Home() {
 
   const githubUser = 'souluizfelipe';
-
-  const [comunidades, setComunidades] = useState([{
-    id: 1273127381,
-    title: 'Eu odeio acordar cedo',
-    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
-  }]);
-
-  const friendsList = [
-    {
-    id: 'omariosouto',
-    title: 'omariosouto',
-    image: 'https://github.com/omariosouto.png'
-    },
-    {
-      id: 'rafaballerini',
-      title: 'rafaballerini',
-      image: 'https://github.com/rafaballerini.png'
-    },  
-    {
-      id: 'peas',
-      title: 'peas',
-      image: 'https://github.com/peas.png'
-    },  
-    {
-      id: 'juunegreiros',
-      title: 'juunegreiros',
-      image: 'https://github.com/juunegreiros.png'
-    },  
-    {
-      id: 'marcobrunodev',
-      title: 'marcobrunodev',
-      image: 'https://github.com/marcobrunodev.png'
-    },  
-    {
-      id: 'joaopealves',
-      title: 'joaopealves',
-      image: 'https://github.com/joaopealves.png'
-    },  
-    {
-      id: 'souluizfelipe',
-      title: 'souluizfelipe',
-      image: 'https://github.com/souluizfelipe.png'
-    },  
-  ]  
-
+  const [communities, setCommunities] = useState([]);
   const [following, setFollowing] = useState([]);
-  // console.log(following)
+  const [follower, setFollower] = useState([]);
 
   useEffect(() => {
     fetch('https://api.github.com/users/souluizfelipe/following')
-    .then(serverResponse => {
-      return serverResponse.json()
-    })
-    .then(convertedResponse => {
-      setFollowing(convertedResponse)
-    })
+    .then(serverRes => serverRes.json())
+    .then(convertedRes => setFollowing(convertedRes))
+
+    fetch('https://api.github.com/users/souluizfelipe/followers')
+    .then(serverRes => serverRes.json())
+    .then(convertedRes => setFollower(convertedRes))
+
+    fetch('https://graphql.datocms.com/', {
+      method: 'POST',
+      headers: {
+        'Authorization': '552025b1dbad880929693f9e12f0b8',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ "query": `query {
+            allCommunities {
+              id
+              title
+              imageUrl
+              creatorSlug
+            }
+          }` })
+      })
+      .then(serverRes => serverRes.json())
+      .then(convertedRes => {
+        const communitiesFromDb = convertedRes.data.allCommunities;
+        console.log(communitiesFromDb)
+        setCommunities(communitiesFromDb)
+      })
   }, [])
  
   return (
@@ -89,16 +67,28 @@ export default function Home() {
                 
                 const inputFormData = new FormData(e.target);
 
-                const comunidade = {
-                  id: new Date().toISOString(),
+                const community = {
                   title: inputFormData.get('communityTitle'),
-                  image: inputFormData.get('communityImage'),
+                  imageUrl: inputFormData.get('communityImage'),
+                  creatorSlug: githubUser,
                 };
 
-                const comunidadesAtualizadas = [...comunidades, comunidade]
-                setComunidades(comunidadesAtualizadas)
-              }}
-            >             
+                fetch('./api/communities', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                  },
+                  body: JSON.stringify(community)
+                })
+                .then(async(res) => {
+                  const data = await res.json();
+                  const community = data.record;
+                  const updatedCommunities = [...communities, community];
+                  setCommunities(updatedCommunities);
+                });
+             
+            }}>             
               
               <input 
                 placeholder="Nome"
@@ -120,10 +110,80 @@ export default function Home() {
 
         <div className="profileRelationsArea" 
           style={{ gridArea: 'profileRelationsArea' }}
-        >         
-          <ProfileRelationsBox boxTitle="Seguindo" contentArray={following} />
-          <ProfileRelationsBox boxTitle="Amigos" contentArray={friendsList} />
-          <ProfileRelationsBox boxTitle="Comunidades" contentArray={comunidades} />
+        >       
+
+          <ProfileRelationsBoxWrapper>
+            <h2 className='smallTitle'>
+              comunidades ({communities.length})
+            </h2>
+            <ul >
+              {communities.map((itemList) => {
+                return (
+                  <li key={itemList.id}>
+                    <a href={`/communities/${itemList.id}`}>
+                      <img src={itemList.imageUrl} />
+                      <span>{itemList.title}</span>
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+            <hr/>
+            <p>
+              <a className="boxLink" href="#" >
+                Ver todos
+              </a>  
+            </p>
+          </ProfileRelationsBoxWrapper>
+
+          <ProfileRelationsBoxWrapper>
+            <h2 className='smallTitle'>
+              Seguidores ({follower.length})
+            </h2>
+            <ul >
+              {follower.map((itemList) => {
+                return (
+                  <li key={itemList.id}>
+                    <a href={`/users/${itemList.login}`}>
+                      <img src={itemList.avatar_url} />
+                      <span>{itemList.login}</span>
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+            <hr/>
+            <p>
+              <a className="boxLink" href="#" >
+                Ver todos
+              </a>  
+            </p>
+          </ProfileRelationsBoxWrapper>
+
+          <ProfileRelationsBoxWrapper>
+            <h2 className='smallTitle'>
+              Seguindo ({following.length})
+            </h2>
+            <ul >
+              {following.map((itemList) => {
+                return (
+                  <li key={itemList.id}>
+                    <a href={`/users/${itemList.login}`}>
+                      <img src={itemList.avatar_url} />
+                      <span>{itemList.login}</span>
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+            <hr/>
+            <p>
+              <a className="boxLink" href="#" >
+                Ver todos
+              </a>  
+            </p>
+          
+          </ProfileRelationsBoxWrapper>
 
         </div>
       </MainGrid>
